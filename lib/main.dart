@@ -40,21 +40,49 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Shodo Helper"),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-          ],
+        appBar: AppBar(
+          title: const Text("Shodo Helper"),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){},
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ),
-    );
+        body: Container(
+          constraints: BoxConstraints.expand(),
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage("assets/images/bg.jpg"), fit: BoxFit.cover),
+          ),
+          child: Card(
+            clipBehavior: Clip.antiAlias,
+            color: Colors.white.withOpacity(0.5),
+            child: SizedBox(
+              width: 250,
+              height: 250,
+              child: Column(
+                children: [
+                  ListTile(
+                    title: Text('猫かぶり',
+                      style: TextStyle(color: Colors.white.withOpacity(0.6)),
+                    ),
+                    subtitle: Text(
+                      'Mutant Monster',
+                      style: TextStyle(color: Colors.white.withOpacity(0.6)),
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.all(16.0),
+                  ),
+                  Image.asset('assets/images/bg.jpg',
+                    height: 250,
+                    width: 250,
+                    fit: BoxFit.fitWidth,
+                  ),
+                  Text("愛想振りまく\n\n本能うずまく\n\n涙見せて、弱音はいて、\n\nジェノベーゼが大好きな\n\n",
+                  style:
+                    TextStyle(color: Colors.white.withOpacity(0.6))
+                  )
+
+                ],
+              ),
+            ),
+          ),
+        ));
   }
 }
