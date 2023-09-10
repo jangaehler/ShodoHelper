@@ -1,6 +1,6 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:kanji_drawing_animation/kanji_drawing_animation.dart';
+
 
 void main() {
   runApp(ShodoHelper());
@@ -22,10 +22,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late PageController _pageController;
-  int _selectedIndex = 0;
+
+  final lyrics = "愛想振りまく\n\n本能うずまく\n\n涙見せて、弱音はいて、\n\nジェノベーゼが大好きな\n\n";
+  String letter = "";
+  int pointer = 0;
 
   @override
   void initState() {
+    letter = lyrics[pointer];
     super.initState();
     _pageController = PageController();
   }
@@ -33,7 +37,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   void dispose() {
     _pageController.dispose();
-
     super.dispose();
   }
 
@@ -49,40 +52,47 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             image: DecorationImage(
                 image: AssetImage("assets/images/bg.jpg"), fit: BoxFit.cover),
           ),
-          child: Card(
-            clipBehavior: Clip.antiAlias,
-            color: Colors.white.withOpacity(0.5),
-            child: SizedBox(
-              width: 250,
-              height: 250,
-              child: Column(
-                children: [
-                  ListTile(
-                    title: Text('猫かぶり',
-                      style: TextStyle(color: Colors.white.withOpacity(0.6)),
-                    ),
-                    subtitle: Text(
-                      'Mutant Monster',
-                      style: TextStyle(color: Colors.white.withOpacity(0.6)),
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.all(16.0),
-                  ),
-                  Image.asset('assets/images/bg.jpg',
-                    height: 250,
-                    width: 250,
-                    fit: BoxFit.fitWidth,
-                  ),
-                  Text("愛想振りまく\n\n本能うずまく\n\n涙見せて、弱音はいて、\n\nジェノベーゼが大好きな\n\n",
-                  style:
+          child: SizedBox(
+            width: 250,
+            height: 250,
+            child: Column(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.all(16.0),
+                ),
+                KanjiDrawingAnimation(letter, speed: 50),
+                const Padding(
+                  padding: EdgeInsets.all(16.0),
+                ),
+                Text(lyrics,
+                    style:
                     TextStyle(color: Colors.white.withOpacity(0.6))
-                  )
-
-                ],
-              ),
+                ),
+                Row(
+                  children: <Widget>[
+                    Spacer(),
+                    ElevatedButton(onPressed: goBack, child: const Text('Back')),
+                    ElevatedButton(onPressed: goFoward, child: const Text('Next')),
+                    Spacer(),
+                  ],
+                ),
+              ],
             ),
           ),
         ));
+  }
+
+  void goBack() {
+    if (pointer > 0) {
+      pointer--;
+      setState(() {letter = lyrics[pointer];});
+    }
+  }
+
+  void goFoward() {
+    if (pointer <= lyrics.length) {
+      pointer++;
+      setState(() {letter = lyrics[pointer];});
+    }
   }
 }
