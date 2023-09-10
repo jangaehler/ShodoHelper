@@ -23,7 +23,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late PageController _pageController;
 
-  final lyrics = "愛想振りまく\n\n本能うずまく\n\n涙見せて、弱音はいて、\n\nジェノベーゼが大好きな\n\n";
+  final lyrics = "愛想振りまく\n本能うずまく\n涙見せて、弱音はいて、\nジェノベーゼが大好きな";
   String letter = "";
   int pointer = 0;
 
@@ -53,27 +53,41 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 image: AssetImage("assets/images/bg.jpg"), fit: BoxFit.cover),
           ),
           child: SizedBox(
-            width: 250,
-            height: 250,
+            width: 350,
+            height: 350,
             child: Column(
               children: [
                 const Padding(
                   padding: EdgeInsets.all(16.0),
                 ),
-                KanjiDrawingAnimation(letter, speed: 50),
+                wrap(letter),
                 const Padding(
                   padding: EdgeInsets.all(16.0),
                 ),
                 Text(lyrics,
                     style:
-                    TextStyle(color: Colors.white.withOpacity(0.6))
+                    TextStyle(
+                        color: Colors.white.withOpacity(0.6),
+                        fontSize: 26,
+                        letterSpacing: 2,
+                        fontFamily: 'Open Sans'
+                    )
+                ),
+                const Padding(
+                  padding: EdgeInsets.all(16.0),
                 ),
                 Row(
                   children: <Widget>[
-                    Spacer(),
-                    ElevatedButton(onPressed: goBack, child: const Text('Back')),
-                    ElevatedButton(onPressed: goFoward, child: const Text('Next')),
-                    Spacer(),
+                    const Spacer(),
+                    ElevatedButton(
+                        onPressed: goBack,
+                        child: const Text('Back')
+                    ),
+                    ElevatedButton(
+                        onPressed: goFoward,
+                        child: const Text('Next')
+                    ),
+                    const Spacer(),
                   ],
                 ),
               ],
@@ -95,4 +109,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       setState(() {letter = lyrics[pointer];});
     }
   }
+
+  // Wraps an animated kanji into a card with fixed height.
+  Widget wrap(String kanji) =>
+      Card(child: SizedBox(height: 300, child: KanjiDrawingAnimation(kanji)));
 }
