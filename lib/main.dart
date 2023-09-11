@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kanji_drawing_animation/kanji_drawing_animation.dart';
 
-
 void main() {
   runApp(ShodoHelper());
 }
@@ -23,13 +22,13 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late PageController _pageController;
 
-  final lyrics = "愛想振りまく\n本能うずまく\n涙見せて、弱音はいて、\nジェノベーゼが大好きな";
-  String letter = "";
-  int pointer = 0;
+  final _lyrics = "愛想振りまく\n本能うずまく\n涙見せて、弱音はいて、\nジェノベーゼが大好きな";
+  String _letter = "";
+  int _pointer = 0;
 
   @override
   void initState() {
-    letter = lyrics[pointer];
+    _letter = _lyrics[_pointer];
     super.initState();
     _pageController = PageController();
   }
@@ -60,19 +59,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 const Padding(
                   padding: EdgeInsets.all(16.0),
                 ),
-                wrap(letter),
+                kanjiCard(_letter),
                 const Padding(
                   padding: EdgeInsets.all(16.0),
                 ),
-                Text(lyrics,
-                    style:
-                    TextStyle(
+                Text(_lyrics,
+                    style: TextStyle(
                         color: Colors.white.withOpacity(0.6),
                         fontSize: 26,
                         letterSpacing: 2,
-                        fontFamily: 'Open Sans'
-                    )
-                ),
+                        fontFamily: 'Open Sans')),
                 const Padding(
                   padding: EdgeInsets.all(16.0),
                 ),
@@ -80,13 +76,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   children: <Widget>[
                     const Spacer(),
                     ElevatedButton(
-                        onPressed: goBack,
-                        child: const Text('Back')
-                    ),
+                        onPressed: goBack, child: const Text('Back')),
                     ElevatedButton(
-                        onPressed: goFoward,
-                        child: const Text('Next')
-                    ),
+                        onPressed: goFoward, child: const Text('Next')),
                     const Spacer(),
                   ],
                 ),
@@ -97,20 +89,22 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   void goBack() {
-    if (pointer > 0) {
-      pointer--;
-      setState(() {letter = lyrics[pointer];});
+    if (_pointer > 0) {
+      setState(() {
+        _letter = _lyrics[--_pointer];
+      });
     }
   }
 
   void goFoward() {
-    if (pointer <= lyrics.length) {
-      pointer++;
-      setState(() {letter = lyrics[pointer];});
+    if (_pointer < _lyrics.length - 1) {
+      setState(() {
+        _letter = _lyrics[++_pointer];
+      });
     }
   }
 
   // Wraps an animated kanji into a card with fixed height.
-  Widget wrap(String kanji) =>
+  Widget kanjiCard(String kanji) =>
       Card(child: SizedBox(height: 300, child: KanjiDrawingAnimation(kanji)));
 }
