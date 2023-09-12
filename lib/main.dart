@@ -42,7 +42,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text("Shodo Helper")),
+        appBar: AppBar(
+            title: const Text("Shodo Helper"),
+            backgroundColor: Colors.black,
+        ),
         body: Container(
           constraints: BoxConstraints.expand(),
           decoration: const BoxDecoration(
@@ -57,12 +60,24 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 const Padding(padding: EdgeInsets.all(16.0)),
                 kanjiCard(_letter),
                 const Padding(padding: EdgeInsets.all(16.0)),
-                Text(_lyrics,
-                    style: TextStyle(
-                        color: Colors.white.withOpacity(0.6),
-                        fontSize: 26,
-                        letterSpacing: 2,
-                        fontFamily: 'Open Sans')),
+                RichText(
+                    text: TextSpan(
+                      text: _lyrics.substring(0, _pointer),
+                      style: TextStyle(
+                          color: Colors.white.withOpacity(0.6),
+                          fontSize: 26,
+                          letterSpacing: 2,
+                          fontFamily: 'Open Sans'),
+                      children: <TextSpan>[
+                        TextSpan(
+                            text: _lyrics.substring(_pointer, _pointer + 1),
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.red
+                            )),
+                        TextSpan(text: _lyrics.substring(_pointer + 1, _lyrics.length)),
+                      ]),
+                ),
                 const Padding(padding: EdgeInsets.all(16.0)),
                 Row(
                   children: <Widget>[
