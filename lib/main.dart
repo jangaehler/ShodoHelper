@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 
+import 'data/drift_db.dart';
 import 'kanji_drawing_animation.dart';
 
+LyricsDatabase? database;
+
 void main() {
+  database = LyricsDatabase();
   runApp(ShodoHelper());
 }
 
@@ -23,21 +27,25 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late PageController _pageController;
   late AnimationController controller;
+  late LyricsDatabase database;
 
-  final _lyrics = "愛想振りまく\n本能うずまく\n涙見せて、弱音はいて、\nジェノベーゼが大好きな\n本能うずまく\n涙見せて、弱音はいて、\nジェノベーゼが大好きな";
+  String? _lyric;
   String _letter = "";
   int _pointer = 0;
   int _selectedIndex = 0;
 
   @override
   void initState() {
-    _letter = _lyrics[_pointer];
+    _lyric = 'a';
+    _letter = _lyric![_pointer];
     controller =
         AnimationController(vsync: this, duration: const Duration(seconds: 8));
     controller.forward();
     super.initState();
     _pageController = PageController();
   }
+
+
 
   @override
   void dispose() {
@@ -71,7 +79,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   scrollDirection: Axis.vertical,
                   child: RichText(
                     text: TextSpan(
-                        text: _lyrics.substring(0, _pointer),
+                        text: _lyric?.substring(0, _pointer),
                         style: TextStyle(
                             color: Colors.white.withOpacity(0.6),
                             fontSize: 26,
@@ -79,13 +87,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                             fontFamily: 'Open Sans'),
                         children: <TextSpan>[
                           TextSpan(
-                              text: _lyrics.substring(_pointer, _pointer + 1),
+                              text: _lyric?.substring(_pointer, _pointer + 1),
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.red)),
                           TextSpan(
-                              text: _lyrics.substring(
-                                  _pointer + 1, _lyrics.length)),
+                              text: _lyric?.substring(
+                                  _pointer + 1, _lyric?.length)),
                         ]),
                   ),
                 ),
@@ -131,7 +139,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   void goBack() {
     if (_pointer > 0) {
       setState(() {
-        _letter = _lyrics[--_pointer];
+        _letter = _lyric![--_pointer];
         controller.reset();
         controller.forward();
       });
@@ -139,9 +147,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   void goFoward() {
-    if (_pointer < _lyrics.length - 1) {
+    if (_pointer < _lyric!.length - 1) {
       setState(() {
-        _letter = _lyrics[++_pointer];
+        _letter = _lyric![++_pointer];
         controller.reset();
         controller.forward();
       });
