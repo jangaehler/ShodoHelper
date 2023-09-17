@@ -29,6 +29,7 @@ class LyricsDatabase extends _$LyricsDatabase {
 //STEP 4 - Open connection to database in system
 
   LyricsDatabase() : super(_openConnection());
+
   @override
   int get schemaVersion =>
       1; // strongly recomend this, to be able to update to new versions of your schema, for any future changes
@@ -49,6 +50,15 @@ class LyricsDatabase extends _$LyricsDatabase {
   Future updateNewLyric(Lyric lyric) => update(lyrics).replace(lyric);
   //DELETE
   Future deleteLyric(Lyric lyric) => delete(lyrics).delete(lyric);
+
+  @override
+  MigrationStrategy get migration {
+    return MigrationStrategy(
+      onCreate: (Migrator m) async {
+        await m.createAll();
+      }
+    );
+  }
 }
 
 LazyDatabase _openConnection() {
@@ -60,5 +70,4 @@ LazyDatabase _openConnection() {
     return NativeDatabase(file,
         logStatements: true); // SET logs to true, for easier development
   });
-  //GOTCHA! -> using Provider package, we would need to dispose, close db on main.dart. Dispose doesn't seem to be necessary using Riverpod
 }
