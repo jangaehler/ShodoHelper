@@ -66,7 +66,9 @@ LazyDatabase _openConnection() {
   return LazyDatabase(() async {
     // put the database file, called db.sqlite here, into the documents folder
     // for your app.
-    final file = File('lyricsdb.sqlite');
+    final dbFolder = await getApplicationDocumentsDirectory(); //
+    final file = File(p.join(dbFolder.path,
+        'tododb.sqlite'));
     return NativeDatabase(file,
         logStatements: true); // SET logs to true, for easier development
   });

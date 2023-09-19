@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:writing_helper/screens/lyrics_page.dart';
 
 import '../main.dart';
 import '../widgets/kanji_card.dart';
@@ -105,6 +106,12 @@ class HomePageState extends ConsumerState<HomePage>  with TickerProviderStateMix
       }
       if (_selectedIndex == 1) {
         goFoward();
+      }
+      if (_selectedIndex == 2) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const LyricsPage()),
+        );
       }
     });
   }
