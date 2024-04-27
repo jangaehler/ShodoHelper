@@ -1,138 +1,109 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:writing_helper/app_states/nav_states/nav_notifier.dart';
 import 'package:writing_helper/screens/lyrics_page.dart';
 
 import '../main.dart';
 import '../widgets/kanji_card.dart';
 
-class HomePage extends ConsumerStatefulWidget {
-  const HomePage({super.key});
-
-  @override
-  HomePageState createState() => HomePageState();
-}
-
-class HomePageState extends ConsumerState<HomePage>  with TickerProviderStateMixin {
-  String newContent = ''; // textfield content
+class HomePage extends HookConsumerWidget {
+  String newContent = '';
   var txtController = TextEditingController();
   late AnimationController controller;
-  String _lyric = "古池や\n蛙飛び込む\n水の音";
-  String _letter = "猫";
-  int _pointer = 0;
-  int _selectedIndex = 0;
 
+  static final List<Widget> _widgetOptions = <Widget>[
+    const LyricsPage(),
+    const Padding(padding: EdgeInsets.all(16.0)),
+    const LyricsPage(),
+  ];
 
   @override
-  Widget build(BuildContext context) {
-    final database = ref.watch(lyricsDBProvider);
-    /*var lyrics = await database.getAllLyrics();
-    _lyric = lyrics.first.content!;
-    _letter = _lyric[_pointer];*/
-    controller =
-        AnimationController(vsync: this, duration: const Duration(seconds: 8));
+  Widget build(BuildContext context, WidgetRef ref) {
+    final text = ref.watch(selectedLyricProvider);
+    final pointer = ref.watch(positionProvider);
+    var navIndex = ref.watch(navProvider);
+    controller = useAnimationController(duration: const Duration(seconds: 4));
     controller.forward();
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Shodo Helper"),
-        backgroundColor: Colors.black,
-      ),
-      body: Container(
+      body: GestureDetector (
+          onTap: () {
+            nextLetter(ref);
+          },
+          onDoubleTap: () {
+            prefLetter(ref);
+          },
+          child: Container(
         constraints: BoxConstraints.expand(),
         decoration: const BoxDecoration(
           image: DecorationImage(
               image: AssetImage("assets/images/bg.jpg"), fit: BoxFit.cover),
         ),
         child: Container(
-          width: 350,
-          height: 350,
-          child: Column(
-            children: [
-              const Padding(padding: EdgeInsets.all(16.0)),
-              KanjiCard(kanji: _letter, controller: controller),
-              const Padding(padding: EdgeInsets.all(16.0)),
-              Expanded(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: RichText(
-                    text: TextSpan(
-                        text: _lyric?.substring(0, _pointer),
-                        style: TextStyle(
-                            color: Colors.white.withOpacity(0.6),
-                            fontSize: 26,
-                            letterSpacing: 2,
-                            fontFamily: 'Open Sans'),
-                        children: <TextSpan>[
-                          TextSpan(
-                              text: _lyric?.substring(_pointer, _pointer + 1),
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.red)),
-                          TextSpan(
-                              text: _lyric?.substring(
-                                  _pointer + 1, _lyric?.length)),
-                        ]),
+            width: 350,
+            height: 350,
+            child: Column(
+              children: [
+                const Padding(padding: EdgeInsets.all(16.0)),
+                const Padding(padding: EdgeInsets.all(16.0)),
+                KanjiCard(kanji: text[pointer], controller: controller),
+                const Padding(padding: EdgeInsets.all(16.0)),
+                Expanded(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: RichText(
+                      text: TextSpan(
+                          text: text?.substring(0, pointer),
+                          style: TextStyle(
+                              color: Colors.white.withOpacity(0.6),
+                              fontSize: 26,
+                              letterSpacing: 2,
+                              fontFamily: 'Open Sans'),
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: text?.substring(pointer, pointer + 1),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.red)),
+                            TextSpan(
+                                text: text?.substring(pointer + 1, text?.length)),
+                          ]),
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
+        )
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.navigate_before),
-            label: 'Back',
-          ),
+              icon: Icon(Icons.gamepad), label: 'Play'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.navigate_next), label: 'Next'),
+              icon: Icon(Icons.library_books), label: 'Library'),
           BottomNavigationBarItem(
-            icon: Icon(Icons.library_books),
-            label: 'Library',
-          ),
+              icon: Icon(Icons.settings), label: 'Settings'),
         ],
-        currentIndex: _selectedIndex,
+        currentIndex: navIndex.index,
         selectedItemColor: Colors.red[800],
-        onTap: _onItemTapped,
+        onTap: (value) {
+          ref.read(navProvider.notifier).onIndexChanged(value);
+        },
       ),
     );
   }
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-      if (_selectedIndex == 0) {
-        goBack();
-      }
-      if (_selectedIndex == 1) {
-        goFoward();
-      }
-      if (_selectedIndex == 2) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const LyricsPage()),
-        );
-      }
-    });
+  void prefLetter(WidgetRef ref) {
+
+    ref.read(positionProvider.notifier).state--;
+    controller.reset();
+    controller.forward();
   }
 
-  void goBack() {
-    if (_pointer > 0) {
-      setState(() async {
-        _letter = _lyric![--_pointer];
-        controller.reset();
-        controller.forward();
-      });
-    }
-  }
-
-  void goFoward() {
-    if (_pointer < _lyric!.length - 1) {
-      setState(() {
-        _letter = _lyric![++_pointer];
-        controller.reset();
-        controller.forward();
-      });
-    }
+  void nextLetter(WidgetRef ref) {
+    ref.read(positionProvider.notifier).state++;
+    controller.reset();
+    controller.forward();
   }
 }

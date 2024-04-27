@@ -8,7 +8,6 @@ usage:
 
 bootstrap:
 	@echo $(LOG_START)
-	git clone https://github.com/parsimonhi/animCJK.git assets/animCJK
-	rm -rf assets/animCJK/samples
-	rm assets/animCJK/*.php
+	git clone https://github.com/KanjiVG/kanjivg.git assets/kanjivg
+	rm assets/kanjivg/*.py
 	@echo $(LOG_STOP)

@@ -25,10 +25,10 @@ class KanjiDrawingAnimation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final filename = kanji.codeUnits.first.toRadixString(16).padLeft(5, '0');
-    final url =
-        'https://raw.githubusercontent.com/KanjiVG/kanjivg/master/kanji/$filename.svg';
+    final key =
+        'assets/kanjivg/kanji/$filename.svg';
     return SvgDrawingAnimation(
-      SvgProvider.network(url),
+      SvgProvider.asset(key),
       repeats: true,
       curve: curve,
       animation: controller,
