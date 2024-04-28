@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:writing_helper/app_states/nav_states/nav_notifier.dart';
-import 'package:writing_helper/screens/lyrics_page.dart';
 
 import '../main.dart';
 import '../widgets/kanji_card.dart';
@@ -13,9 +12,7 @@ class HomePage extends HookConsumerWidget {
   late AnimationController controller;
 
   static final List<Widget> _widgetOptions = <Widget>[
-    const LyricsPage(),
     const Padding(padding: EdgeInsets.all(16.0)),
-    const LyricsPage(),
   ];
 
   @override
@@ -75,21 +72,6 @@ class HomePage extends HookConsumerWidget {
             ),
           ),
         )
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-              icon: Icon(Icons.gamepad), label: 'Play'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.library_books), label: 'Library'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.settings), label: 'Settings'),
-        ],
-        currentIndex: navIndex.index,
-        selectedItemColor: Colors.red[800],
-        onTap: (value) {
-          ref.read(navProvider.notifier).onIndexChanged(value);
-        },
       ),
     );
   }
