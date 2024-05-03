@@ -1,5 +1,5 @@
-name: writing_helper
-description: A helper tool for playing with japanese lyrics
+name: shodo_helper
+description: "Having fun with japanese"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: '>=3.3.4 <4.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -30,35 +30,24 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  svg_drawing_animation:
+    path: package/svg_drawing_animation
 
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
-  svg_drawing_animation: ^0.10.3
-  path_provider: ^2.0.14
-  path: ^1.8.2
-  flutter_slidable: ^3.0.0
-  drift_db_viewer: ^2.0.0
-  flutter_riverpod: ^2.4.0
-  flutter_hooks: ^0.20.1
-  hooks_riverpod: ^2.4.0
-  equatable: ^2.0.5
+  cupertino_icons: ^1.0.6
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  build_runner: ^2.2.0
-  drift_dev: ^2.2.0+1
-
-
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

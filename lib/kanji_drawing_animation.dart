@@ -4,9 +4,9 @@ import 'package:svg_drawing_animation/svg_drawing_animation.dart';
 class KanjiDrawingAnimation extends StatelessWidget {
   static const Color _color = Color(0x8A000000);
   const KanjiDrawingAnimation(this.kanji,
-      { this.speed = 80,
+      { this.speed = 2,
         this.curve = Curves.decelerate,
-        this.useLocalSvg = false,
+        this.useLocalSvg = true,
         this.penRadius = 15,
         this.penColor = _color,
         this.controller,
@@ -32,11 +32,12 @@ class KanjiDrawingAnimation extends StatelessWidget {
       repeats: true,
       curve: curve,
       animation: controller,
+      refresh: true,
       errorWidgetBuilder: (context, error, stackTrace) =>
           Text('No kanji stroke information for $kanji'),
       penRenderer: CirclePenRenderer(
           radius: penRadius,
-          paint: Paint()..color = penColor),
+          paint: Paint()..color = penColor)
     );
   }
 }

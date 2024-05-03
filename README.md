@@ -1,7 +1,16 @@
-# Shodo Helper
+# shodo_helper
 
-Shodo Helper is designed to make it easier to practice writing Japanese texts. You can go through any text character by character and get the stroke order displayed.
+Having fun with japanese
 
-## Sketch
-Rough draft.
-![screen](https://github.com/jangaehler/ShodoHelper/assets/158562/cf999748-5d65-4d47-9f6b-4741483a8ed2)
+## Getting Started
+
+This project is a starting point for a Flutter application.
+
+A few resources to get you started if this is your first Flutter project:
+
+- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+
+For help getting started with Flutter development, view the
+[online documentation](https://docs.flutter.dev/), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.
