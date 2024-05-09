@@ -7,22 +7,23 @@ import '../widgets/kanji_card.dart';
 class HomePage extends StatefulWidget {
 
   @override
-  State<HomePage> createState() => _MyHomePageState();
+  State<HomePage> createState() => MyHomePageState();
 }
 
-class _MyHomePageState extends State<HomePage> with SingleTickerProviderStateMixin{
+enum MoveKanji{go, back, init}
+
+class MyHomePageState extends State<HomePage> with SingleTickerProviderStateMixin{
   late Lyric lyric = Lyric();
   late AnimationController controller;
-  int _position = 0;
+  int position = 0;
 
  @override
   void initState() {
     lyric.fullLyric = '古池や\n蛙飛';
-    lyric = getKanji(true);
+    lyric = getKanji(MoveKanji.init);
     controller =
         AnimationController(vsync: this, duration: Duration(seconds: 5));
     controller.forward();
-    _getClipboardText();
     super.initState();
   }
 
@@ -34,7 +35,7 @@ class _MyHomePageState extends State<HomePage> with SingleTickerProviderStateMix
 
   void _nextLetter() {
     setState(() {
-      lyric = getKanji(true);
+      lyric = getKanji(MoveKanji.go);
       controller.reset();
       controller.forward();
     });
@@ -42,30 +43,33 @@ class _MyHomePageState extends State<HomePage> with SingleTickerProviderStateMix
 
   void _prefLetter() {
     setState(() {
-      lyric = getKanji(false);
+      lyric = getKanji(MoveKanji.back);
       controller.reset();
       controller.forward();
     });
   }
 
-  Lyric getKanji(bool forward) {
+  Lyric getKanji(MoveKanji moveKanji) {
     do {
-      if (forward) {
-        if (_position < lyric.fullLyric!.length - 1) {
-          _position++;
-        }
-      } else {
-        if (_position != 0){
-          _position--;
-        }
+      switch (moveKanji) {
+        case MoveKanji.go:
+          if (position < lyric.fullLyric!.length - 1) {
+            position++;
+          }
+        case MoveKanji.back:
+          if (position != 0){
+            position--;
+          }
+        default:
+          position = 0;
       }
 
-      lyric.actLetter = lyric.fullLyric!.substring(_position, _position + 1);
+      lyric.actLetter = lyric.fullLyric!.substring(position, position + 1);
     }
     while (lyric.actLetter == '\n' || lyric.actLetter == ' ');
 
-    lyric.beforeLetter = lyric.fullLyric!.substring(0, _position);
-    lyric.afterLetter = lyric.fullLyric!.substring(_position + 1, lyric.fullLyric!.length);
+    lyric.beforeLetter = lyric.fullLyric!.substring(0, position);
+    lyric.afterLetter = lyric.fullLyric!.substring(position + 1, lyric.fullLyric!.length);
 
     return lyric;
   }
@@ -74,8 +78,8 @@ class _MyHomePageState extends State<HomePage> with SingleTickerProviderStateMix
     final ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
     setState(() {
       lyric.fullLyric = data?.text ?? "";
-      _position = -1;
-      lyric = getKanji(true);
+      position = 0;
+      lyric = getKanji(MoveKanji.init);
     });
   }
 
@@ -143,3 +147,4 @@ class _MyHomePageState extends State<HomePage> with SingleTickerProviderStateMix
     );
   }
 }
+
