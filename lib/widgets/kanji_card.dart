@@ -4,7 +4,7 @@ import '../kanji_drawing_animation.dart';
 
 class KanjiCard extends StatelessWidget {
   final String kanji;
-  late AnimationController controller;
+  final AnimationController controller;
 
   KanjiCard({super.key, required this.kanji, required this.controller});
 
